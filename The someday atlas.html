@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Someday Atlas</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Work+Sans:wght@400;500;600;700&display=swap');
+
+:root{
+  --ink:#141a30;
+  --ink-2:#1c2340;
+  --panel:#20274a;
+  --paper:#f6f0e2;
+  --paper-shadow:#d8cfb8;
+  --gold:#c9a15d;
+  --gold-bright:#e0b96f;
+  --stamp-red:#b3503f;
+  --text-soft:#eee9dc;
+  --text-dim:#a9adc4;
+  --line: rgba(238,233,220,0.14);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(circle at 12% 8%, rgba(201,161,93,0.10), transparent 40%),
+    radial-gradient(circle at 88% 92%, rgba(201,161,93,0.08), transparent 45%),
+    var(--ink);
+  color:var(--text-soft);
+  font-family:'Work Sans', sans-serif;
+  min-height:100vh;
+  padding: 20px 16px 60px; /* Reduced padding for mobile */
+}
+
+@media (min-width: 600px) {
+  body {
+    padding: 32px 20px 80px; /* Original padding for larger screens */
+  }
+}
+
+.wrap{max-width:1100px;margin:0 auto;}
+
+.header{
+  display:flex; flex-wrap:wrap; gap:16px; /* Reduced gap */
+  justify-content:space-between; align-items:flex-end;
+  border-bottom:1px solid var(--line);
+  padding-bottom:16px; margin-bottom:20px; /* Reduced spacing */
+}
+.title-block .eyebrow{
+  font-size:10px; letter-spacing:0.24em; text-transform:uppercase; /* Slightly smaller eyebrow */
+  color:var(--gold); font-weight:600; margin-bottom:6px;
+}
+.title-block h1{
+  font-family:'Fraunces', serif; font-weight:600; font-style:italic;
+  font-size:32px; margin:0; line-height:1.1; color:var(--text-soft); /* Smaller title on mobile */
+}
+@media (min-width: 600px) {
+  .title-block h1 {
+    font-size:38px; line-height:1.05;
+  }
+}
+.title-block p{
+  margin:8px 0 0; color:var(--text-dim); font-size:14px; max-width:100%; /* Full width on mobile */
+}
+@media (min-width: 600px) {
+  .title-block p {
+    font-size:14.5px; max-width:440px;
+  }
+}
+.stats{display:flex; gap:16px; font-size:12px; color:var(--text-dim); width: 100%;} /* Full width, smaller text */
+@media (min-width: 600px) {
+  .stats {
+    width: auto; gap: 22px; font-size: 13px;
+  }
+}
+.stats b{color:var(--gold-bright); font-size:18px; display:block; font-family:'Fraunces',serif; font-weight:600;}
+@media (min-width: 600px) {
+  .stats b { font-size:20px; }
+}
+
+.toolbar{
+  display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:24px;
+}
+.search{
+  flex:1 1 100%; /* Take full width on mobile */
+  background:var(--panel); border:1px solid var(--line); border-radius:10px;
+  padding:11px 14px; color:var(--text-soft); font-size:14px; font-family:'Work Sans',sans-serif;
+}
+.btn-add{
+  flex:1 1 100%; /* Take full width on mobile */
+  background:var(--gold); color:var(--ink); border:none; border-radius:10px;
+  padding:12px 20px; font-weight:600; font-size:14px; cursor:pointer; /* Slightly taller padding for touch */
+  font-family:'Work Sans',sans-serif; white-space:nowrap;
+  transition:transform .15s ease, background .15s ease;
+  display: flex; justify-content: center; align-items: center; /* Center text */
+}
+
+@media (min-width: 600px) {
+  .search { flex:1; min-width:200px; }
+  .btn-add { flex: 0 0 auto; padding: 11px 20px;}
+}
+
+.search::placeholder{color:var(--text-dim);}
+.search:focus{outline:2px solid var(--gold); outline-offset:1px;}
+
+.btn-add{
+  background:var(--gold); color:var(--ink); border:none; border-radius:10px;
+  padding:11px 20px; font-weight:600; font-size:14px; cursor:pointer;
+  font-family:'Work Sans',sans-serif; white-space:nowrap;
+  transition:transform .15s ease, background .15s ease;
+}
+.btn-add:hover{background:var(--gold-bright); transform:translateY(-1px);}
+.btn-add:focus-visible{outline:2px solid var(--text-soft); outline-offset:2px;}
+
+.country-section{margin-bottom:18px;}
+details.country-section > summary{list-style:none; cursor:pointer;}
+details.country-section > summary::-webkit-details-marker{display:none;}
+
+.postmark{
+  display:inline-flex; align-items:center; gap:12px;
+  padding:10px 18px 10px 10px;
+  border:1.5px dashed var(--gold);
+  border-radius:999px;
+  margin-bottom:14px;
+  background:rgba(201,161,93,0.06);
+}
+.postmark .circle{
+  width:34px;height:34px;border-radius:50%;
+  border:1.5px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px; flex-shrink:0;
+}
+.postmark .country-name{
+  font-family:'Fraunces',serif; font-weight:600; font-size:16px;
+  letter-spacing:0.02em; color:var(--text-soft);
+}
+.postmark .count{
+  font-size:11px; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase;
+}
+.chevron{margin-left:2px; font-size:11px; color:var(--text-dim); transition:transform .2s;}
+details[open] .chevron{transform:rotate(90deg);}
+
+.grid{
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); /* Wider min-width for mobile reading */
+  gap:24px 16px; padding:6px 4px 20px;
+}
+@media (min-width: 600px) {
+  .grid {
+    grid-template-columns:repeat(auto-fill, minmax(230px,1fr)); /* Original width for desktop */
+    gap:26px 22px;
+  }
+}
+
+.card{
+  position:relative;
+  background:var(--paper);
+  border-radius:4px;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.35), 0 2px 0 var(--paper-shadow);
+  padding:10px 10px 14px;
+  color:#2a2418;
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.card:hover, .card:focus-within{
+  transform:translateY(-4px) rotate(0deg) !important;
+  box-shadow:0 16px 30px rgba(0,0,0,0.45), 0 2px 0 var(--paper-shadow);
+  z-index:2;
+}
+.tape{
+  position:absolute; top:-10px; left:50%; transform:translateX(-50%) rotate(-2deg);
+  width:70px; height:22px;
+  background:rgba(238,233,220,0.55);
+  border:1px solid rgba(0,0,0,0.05);
+  box-shadow:0 2px 4px rgba(0,0,0,0.15);
+}
+.card-img{
+  width:100%; aspect-ratio:4/3; border-radius:2px; overflow:hidden;
+  background:linear-gradient(135deg,#2c3560,#40325a);
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:10px;
+}
+.card-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.card-img .placeholder-icon{font-size:34px; opacity:0.8;}
+
+.card h3{
+  font-family:'Fraunces',serif; font-weight:600; font-size:17px; margin:0 0 4px;
+  line-height:1.2;
+}
+.card .notes{
+  font-size:12.5px; color:#5a5140; line-height:1.4; margin:0 0 10px;
+  display:-webkit-box; line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+  min-height:1em;
+}
+.card-footer{display:flex; align-items:center; justify-content:space-between; gap:8px;}
+.reel-link{
+  font-size:12px; font-weight:600; color:var(--stamp-red); text-decoration:none;
+  display:inline-flex; align-items:center; gap:5px;
+  border-bottom:1px solid transparent;
+}
+.reel-link:hover{border-bottom-color:var(--stamp-red);}
+.card-actions{display:flex; gap:4px; opacity:0; transition:opacity .15s;}
+.card:hover .card-actions, .card:focus-within .card-actions{opacity:1;}
+.icon-btn{
+  background:none; border:none; cursor:pointer; font-size:14px; padding:4px 6px;
+  color:#5a5140; border-radius:5px;
+}
+.icon-btn:hover{background:rgba(0,0,0,0.06);}
+.icon-btn:focus-visible{outline:2px solid var(--stamp-red);}
+
+.empty-state{
+  text-align:center; padding:80px 20px; color:var(--text-dim);
+}
+.empty-state .glyph{font-size:44px; margin-bottom:14px;}
+.empty-state h2{font-family:'Fraunces',serif; font-style:italic; font-weight:500; color:var(--text-soft); margin:0 0 8px; font-size:22px;}
+.empty-state p{max-width:340px; margin:0 auto; font-size:14px; line-height:1.5;}
+
+.loading-msg{color:var(--text-dim); font-size:14px; padding:40px; text-align:center;}
+.banner{
+  background:rgba(179,80,63,0.15); border:1px solid var(--stamp-red); color:#f0c9c2;
+  padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:18px; display:none;
+}
+
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(10,12,24,0.7);
+  display:none; align-items:center; justify-content:center; padding:16px; z-index:50; /* Less padding on overlay */
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--panel); border:1px solid var(--line); border-radius:14px;
+  width:100%; max-width:440px; padding:20px 20px 16px; /* Less padding inside modal */
+  max-height:90vh; overflow-y:auto;
+}
+@media (min-width: 600px) {
+  .modal { padding:26px 26px 22px; }
+}
+.modal h2{
+  font-family:'Fraunces',serif; font-weight:600; font-style:italic; font-size:22px;
+  margin:0 0 4px; color:var(--text-soft);
+}
+.modal .sub{color:var(--text-dim); font-size:12.5px; margin:0 0 18px;}
+.field{margin-bottom:14px;}
+.field label{
+  display:block; font-size:11.5px; letter-spacing:0.06em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:6px; font-weight:600;
+}
+.field input, .field textarea{
+  width:100%; background:var(--ink-2); border:1px solid var(--line); border-radius:8px;
+  padding:10px 12px; color:var(--text-soft); font-family:'Work Sans',sans-serif; font-size:14px;
+  resize:vertical;
+}
+.field input:focus, .field textarea:focus{outline:2px solid var(--gold); outline-offset:1px;}
+.field .hint{font-size:11px; color:var(--text-dim); margin-top:5px;}
+.required-mark{color:var(--stamp-red);}
+.modal-actions{display:flex; justify-content:flex-end; gap:10px; margin-top:20px;}
+.btn-secondary{
+  background:none; border:1px solid var(--line); color:var(--text-dim);
+  padding:10px 16px; border-radius:8px; cursor:pointer; font-size:13.5px; font-family:'Work Sans',sans-serif;
+}
+.btn-secondary:hover{color:var(--text-soft); border-color:var(--text-dim);}
+.btn-primary{
+  background:var(--gold); border:none; color:var(--ink); font-weight:600;
+  padding:10px 18px; border-radius:8px; cursor:pointer; font-size:13.5px; font-family:'Work Sans',sans-serif;
+}
+.btn-primary:hover{background:var(--gold-bright);}
+.btn-primary:disabled{opacity: 0.6; cursor: not-allowed;}
+.field-error{border-color:var(--stamp-red) !important;}
+.error-text{color:#e79b8c; font-size:12px; margin-top:5px; display:none;}
+
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important;}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="header">
+    <div class="title-block">
+      <div class="eyebrow">Shared &middot; Someday, Together</div>
+      <h1>The Someday Atlas</h1>
+      <p>Every reel-worthy place you two want to visit, sorted by country and waiting for a date on the calendar.</p>
+    </div>
+    <div class="stats">
+      <div><b id="stat-countries">0</b>countries</div>
+      <div><b id="stat-places">0</b>places</div>
+    </div>
+  </div>
+
+  <div class="banner" id="banner"></div>
+
+  <div class="toolbar">
+    <input class="search" id="search" type="text" placeholder="Search by place, country, or note…" />
+    <button class="btn-add" id="btn-open-add">+ Add a place</button>
+  </div>
+
+  <div id="content">
+    <div class="loading-msg">Connecting to Realtime Database…</div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <h2 id="modal-title">Add a place</h2>
+    <p class="sub">Paste the reel link, then fill in the rest.</p>
+    <form id="place-form">
+      <div class="field">
+        <label for="f-link">Reel / link</label>
+        <input id="f-link" type="url" placeholder="https://instagram.com/reel/…" />
+        <div class="hint">Optional, but handy so you can find your way back to it.</div>
+      </div>
+      <div class="field">
+        <label for="f-name">Place name <span class="required-mark">*</span></label>
+        <input id="f-name" type="text" placeholder="e.g. Lake Bled" />
+        <div class="error-text" id="err-name">Give this place a name.</div>
+      </div>
+      <div class="field">
+        <label for="f-country">Country <span class="required-mark">*</span></label>
+        <input id="f-country" type="text" placeholder="e.g. Slovenia" />
+        <div class="error-text" id="err-country">Which country is it in?</div>
+      </div>
+      <div class="field">
+        <label for="f-image">Photo URL</label>
+        <input id="f-image" type="url" placeholder="Paste an image link (optional)" />
+      </div>
+      <div class="field">
+        <label for="f-notes">Notes</label>
+        <textarea id="f-notes" rows="3" placeholder="Why you saved it, best time to go, who mentioned it…"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="btn-cancel">Cancel</button>
+        <button type="submit" class="btn-primary" id="btn-save">Save place</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { 
+  getDatabase, 
+  ref, 
+  onValue, 
+  push, 
+  set, 
+  remove 
+} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDJXOfM02mUdfmoD8nCng2Iwu39dqBaLv0",
+  authDomain: "somedayatlas.firebaseapp.com",
+  // CRITICAL: RTDB Requires databaseURL to be explicitly set!
+  // Replace this with your actual DB URL if it differs.
+  databaseURL: "https://somedayatlas-default-rtdb.firebaseio.com", 
+  projectId: "somedayatlas",
+  storageBucket: "somedayatlas.firebasestorage.app",
+  messagingSenderId: "645113154134",
+  appId: "1:645113154134:web:ca2c10c0abc5cb5d4709f7",
+  measurementId: "G-ERFZJPRM4Z"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+let places = [];
+let editingId = null;
+let currentUser = null;
+
+const FLAGS = {
+  "afghanistan":"AF","albania":"AL","algeria":"DZ","argentina":"AR","armenia":"AM","australia":"AU","austria":"AT",
+  "azerbaijan":"AZ","bahamas":"BS","bahrain":"BH","bangladesh":"BD","barbados":"BB","belarus":"BY","belgium":"BE",
+  "belize":"BZ","bhutan":"BT","bolivia":"BO","bosnia":"BA","botswana":"BW","brazil":"BR","brunei":"BN","bulgaria":"BG",
+  "cambodia":"KH","cameroon":"CM","canada":"CA","chile":"CL","china":"CN","colombia":"CO","costa rica":"CR",
+  "croatia":"HR","cuba":"CU","cyprus":"CY","czechia":"CZ","czech republic":"CZ","denmark":"DK","dominican republic":"DO",
+  "ecuador":"EC","egypt":"EG","el salvador":"SV","england":"GB","estonia":"EE","ethiopia":"ET","fiji":"FJ",
+  "finland":"FI","france":"FR","georgia":"GE","germany":"DE","ghana":"GH","greece":"GR","greenland":"GL",
+  "guatemala":"GT","honduras":"HN","hong kong":"HK","hungary":"HU","iceland":"IS","india":"IN","indonesia":"ID",
+  "iran":"IR","iraq":"IQ","ireland":"IE","israel":"IL","italy":"IT","jamaica":"JM","japan":"JP","jordan":"JO",
+  "kazakhstan":"KZ","kenya":"KE","kuwait":"KW","laos":"LA","latvia":"LV","lebanon":"LB","lithuania":"LT",
+  "luxembourg":"LU","malaysia":"MY","maldives":"MV","malta":"MT","mexico":"MX","monaco":"MC","mongolia":"MN",
+  "montenegro":"ME","morocco":"MA","myanmar":"MM","namibia":"NA","nepal":"NP","netherlands":"NL","new zealand":"NZ",
+  "nicaragua":"NI","nigeria":"NG","north macedonia":"MK","norway":"NO","oman":"OM","pakistan":"PK","panama":"PA",
+  "papua new guinea":"PG","paraguay":"PY","peru":"PE","philippines":"PH","poland":"PL","portugal":"PT","qatar":"QA",
+  "romania":"RO","russia":"RU","rwanda":"RW","samoa":"WS","saudi arabia":"SA","scotland":"GB","senegal":"SN",
+  "serbia":"RS","seychelles":"SC","singapore":"SG","slovakia":"SK","slovenia":"SI","south africa":"ZA",
+  "south korea":"KR","spain":"ES","sri lanka":"LK","sweden":"SE","switzerland":"CH","taiwan":"TW","tajikistan":"TJ",
+  "tanzania":"TZ","thailand":"TH","tunisia":"TN","turkey":"TR","turkiye":"TR","uganda":"UG","ukraine":"UA",
+  "united arab emirates":"AE","uae":"AE","united kingdom":"GB","uk":"GB","united states":"US","usa":"US",
+  "us":"US","uruguay":"UY","uzbekistan":"UZ","vanuatu":"VU","vatican city":"VA","venezuela":"VE","vietnam":"VN",
+  "wales":"GB","zambia":"ZM","zimbabwe":"ZW"
+};
+
+function flagFor(country){
+  const code = FLAGS[(country||'').trim().toLowerCase()];
+  if(!code) return "🌍";
+  return String.fromCodePoint(...[...code].map(c => 127397 + c.charCodeAt(0)));
+}
+
+function showBanner(msg, isError = false){
+  const b = document.getElementById('banner');
+  b.textContent = msg;
+  b.style.display = 'block';
+  b.style.backgroundColor = isError ? 'rgba(179,80,63,0.15)' : 'rgba(201,161,93,0.15)';
+  b.style.borderColor = isError ? 'var(--stamp-red)' : 'var(--gold)';
+  b.style.color = isError ? '#f0c9c2' : 'var(--gold-bright)';
+  setTimeout(()=>{ b.style.display='none'; }, 4500);
+}
+
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str || '';
+  return d.innerHTML;
+}
+
+function rotationFor(id){
+  let hash = 0;
+  for(let i=0; i < (id||'').length; i++) hash = (hash * 31 + id.charCodeAt(i)) % 1000;
+  return ((hash / 1000) * 5 - 2.5).toFixed(2);
+}
+
+function initRealtimeSync() {
+  const placesRef = ref(db, 'places');
+  
+  // onValue automatically listens to changes in realtime
+  onValue(placesRef, (snapshot) => {
+    places = [];
+    snapshot.forEach((childSnapshot) => {
+      places.push({ id: childSnapshot.key, ...childSnapshot.val() });
+    });
+    render();
+  }, (error) => {
+    console.error("RTDB Error:", error);
+    showBanner("Connection lost. Please check permissions.", true);
+  });
+}
+
+function render(){
+  const content = document.getElementById('content');
+  const query = document.getElementById('search').value.trim().toLowerCase();
+
+  const filtered = places.filter(p=>{
+    if(!query) return true;
+    return (p.name||'').toLowerCase().includes(query)
+      || (p.country||'').toLowerCase().includes(query)
+      || (p.notes||'').toLowerCase().includes(query);
+  });
+
+  document.getElementById('stat-places').textContent = places.length;
+  document.getElementById('stat-countries').textContent = new Set(places.map(p=>p.country.toLowerCase())).size;
+
+  if(places.length === 0){
+    content.innerHTML = `
+      <div class="empty-state">
+        <div class="glyph">🗺️</div>
+        <h2>The atlas is empty</h2>
+        <p>Next time a reel stops you mid-scroll, paste the link here and it'll land in the right country.</p>
+      </div>`;
+    return;
+  }
+
+  if(filtered.length === 0){
+    content.innerHTML = `
+      <div class="empty-state">
+        <div class="glyph">🔍</div>
+        <h2>No matches</h2>
+        <p>Try a different search term.</p>
+      </div>`;
+    return;
+  }
+
+  const byCountry = {};
+  filtered.forEach(p=>{
+    const key = p.country || 'Unsorted';
+    if(!byCountry[key]) byCountry[key] = [];
+    byCountry[key].push(p);
+  });
+
+  const countries = Object.keys(byCountry).sort((a,b)=>a.localeCompare(b));
+
+  content.innerHTML = countries.map(country=>{
+    const list = byCountry[country].sort((a,b)=> (b.dateAdded||0) - (a.dateAdded||0));
+    const cards = list.map(p=>{
+      const rot = rotationFor(p.id);
+      const img = p.imageUrl
+        ? `<img src="${escapeHtml(p.imageUrl)}" alt="${escapeHtml(p.name)}" onerror="this.parentElement.innerHTML='<span class=\\'placeholder-icon\\'>🖼️</span>'" />`
+        : `<span class="placeholder-icon">📍</span>`;
+      const linkBtn = p.link
+        ? `<a class="reel-link" href="${escapeHtml(p.link)}" target="_blank" rel="noopener noreferrer">▶ Watch reel</a>`
+        : `<span></span>`;
+      return `
+        <div class="card" style="transform:rotate(${rot}deg)">
+          <div class="tape"></div>
+          <div class="card-img">${img}</div>
+          <h3>${escapeHtml(p.name)}</h3>
+          <p class="notes">${escapeHtml(p.notes)}</p>
+          <div class="card-footer">
+            ${linkBtn}
+            <div class="card-actions">
+              <button class="icon-btn edit-btn" data-id="${escapeHtml(p.id)}" title="Edit">✎</button>
+              <button class="icon-btn remove-btn" data-id="${escapeHtml(p.id)}" title="Remove">✕</button>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    return `
+      <details class="country-section" open>
+        <summary>
+          <div class="postmark">
+            <div class="circle">${flagFor(country)}</div>
+            <div>
+              <div class="country-name">${escapeHtml(country)}</div>
+              <div class="count">${list.length} place${list.length===1?'':'s'}</div>
+            </div>
+            <span class="chevron">▶</span>
+          </div>
+        </summary>
+        <div class="grid">${cards}</div>
+      </details>`;
+  }).join('');
+
+  // Attach button events after DOM manipulation
+  document.querySelectorAll('.edit-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => window.openEdit(e.currentTarget.dataset.id));
+  });
+  document.querySelectorAll('.remove-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => window.removePlace(e.currentTarget.dataset.id));
+  });
+}
+
+const overlay = document.getElementById('modal-overlay');
+const form = document.getElementById('place-form');
+
+function openAdd(){
+  editingId = null;
+  document.getElementById('modal-title').textContent = 'Add a place';
+  form.reset();
+  clearErrors();
+  overlay.classList.add('open');
+  document.getElementById('f-link').focus();
+}
+
+window.openEdit = function(id) {
+  const p = places.find(x=>x.id===id);
+  if(!p) return;
+  editingId = id;
+  document.getElementById('modal-title').textContent = 'Edit place';
+  document.getElementById('f-link').value = p.link || '';
+  document.getElementById('f-name').value = p.name || '';
+  document.getElementById('f-country').value = p.country || '';
+  document.getElementById('f-image').value = p.imageUrl || '';
+  document.getElementById('f-notes').value = p.notes || '';
+  clearErrors();
+  overlay.classList.add('open');
+};
+
+window.removePlace = async function(id) {
+  if(!currentUser) {
+    showBanner("Please wait for authentication...", true);
+    return;
+  }
+  try {
+    const placeRef = ref(db, 'places/' + id);
+    await remove(placeRef);
+    showBanner("Place removed.");
+  } catch(e) {
+    console.error(e);
+    showBanner("Failed to delete place.", true);
+  }
+};
+
+function closeModal(){
+  overlay.classList.remove('open');
+}
+
+function clearErrors(){
+  ['name','country'].forEach(f=>{
+    document.getElementById('f-'+f).classList.remove('field-error');
+    document.getElementById('err-'+f).style.display = 'none';
+  });
+}
+
+// Event Listeners
+document.getElementById('btn-open-add').addEventListener('click', openAdd);
+document.getElementById('btn-cancel').addEventListener('click', closeModal);
+overlay.addEventListener('click', (e)=>{ if(e.target === overlay) closeModal(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && overlay.classList.contains('open')) closeModal(); });
+document.getElementById('search').addEventListener('input', render);
+
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  
+  if(!currentUser) {
+    showBanner("Connecting... please wait.", true);
+    return;
+  }
+
+  clearErrors();
+  const name = document.getElementById('f-name').value.trim();
+  const country = document.getElementById('f-country').value.trim();
+  let valid = true;
+  
+  if(!name){ document.getElementById('f-name').classList.add('field-error'); document.getElementById('err-name').style.display='block'; valid=false; }
+  if(!country){ document.getElementById('f-country').classList.add('field-error'); document.getElementById('err-country').style.display='block'; valid=false; }
+  if(!valid) return;
+
+  const saveBtn = document.getElementById('btn-save');
+  saveBtn.disabled = true;
+  saveBtn.textContent = 'Saving...';
+
+  const data = {
+    name,
+    country,
+    link: document.getElementById('f-link').value.trim(),
+    imageUrl: document.getElementById('f-image').value.trim(),
+    notes: document.getElementById('f-notes').value.trim(),
+  };
+
+  try {
+    if (editingId) {
+      // Update existing record
+      const existingPlace = places.find(p => p.id === editingId);
+      const placeRef = ref(db, 'places/' + editingId);
+      await set(placeRef, {
+        ...data,
+        dateAdded: existingPlace?.dateAdded || Date.now()
+      });
+      showBanner("Place updated.");
+    } else {
+      // Push new record
+      const newRef = push(ref(db, 'places'));
+      await set(newRef, {
+        ...data,
+        dateAdded: Date.now()
+      });
+      showBanner("Place added! Ready for an adventure.");
+    }
+    closeModal();
+  } catch(err) {
+    console.error("Save error:", err);
+    showBanner("Failed to save. Check your database rules.", true);
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.textContent = 'Save place';
+  }
+});
+
+async function startApp() {
+  try {
+    // Authenticate first, required by most default rulesets
+    const userCredential = await signInAnonymously(auth);
+    currentUser = userCredential.user;
+    
+    // Begin watching the database for changes
+    initRealtimeSync();
+  } catch (error) {
+    console.error("Auth Error:", error);
+    document.getElementById('content').innerHTML = `
+      <div class="empty-state">
+        <div class="glyph">⚠️</div>
+        <h2>Connection Error</h2>
+        <p>Could not connect to Firebase. Check your config and authentication settings.</p>
+      </div>`;
+  }
+}
+
+// Start
+startApp();
+
+</script>
+</body>
+</html>
